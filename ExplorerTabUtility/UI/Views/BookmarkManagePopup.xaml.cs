@@ -110,6 +110,31 @@ namespace ExplorerTabUtility.UI.Views
             popup.ShowDialog();
         }
 
+        private async void OpenBookmark(BookmarkAction action, bool isFocusedTreeView)
+        {
+            var selectedInfos = GetOperateInfos(isFocusedTreeView);
+            var infos = selectedInfos.SelectMany(t => t.GetBookmarkInfos()).ToList();
+            if (infos.Count == 0) return;
+
+            if (action == BookmarkAction.OpenInNewTab)
+            {
+                foreach (var item in infos)
+                {
+                    await explorerWatcher.Open(item.Location, true, windowHandle, inCurrentTab: false);
+                }
+                return;
+            }
+
+            var newWindowHandle = await explorerWatcher.Open(infos.First().Location, false, windowHandle);
+            if (newWindowHandle != 0 && infos.Count > 1)
+            {
+                foreach (var item in infos)
+                {
+                    await explorerWatcher.Open(item.Location, true, newWindowHandle, inCurrentTab: false);
+                }
+            }
+        }
+
         private void Cut(bool isFocusedTreeView)
         {
             var cutInfos = GetOperateInfos(isFocusedTreeView);
@@ -119,8 +144,8 @@ namespace ExplorerTabUtility.UI.Views
 
         private void Copy(bool isFocusedTreeView)
         {
-            var cutInfos = GetOperateInfos(isFocusedTreeView);
-            BookmarkManager.ClipboardManager.Copy(cutInfos, string.IsNullOrEmpty(TxtSearch.Text));
+            var copyInfos = GetOperateInfos(isFocusedTreeView);
+            BookmarkManager.ClipboardManager.Copy(copyInfos, string.IsNullOrEmpty(TxtSearch.Text));
         }
 
         private void Paste(bool isFocusedTreeView)
@@ -307,23 +332,15 @@ namespace ExplorerTabUtility.UI.Views
                     }
                     break;
                 case Key.T:
-                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control) && LbChildren.SelectedItems.Count == 1)
+                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
                     {
-                        var info = (BookmarkTreeViewInfo)LbChildren.SelectedItem;
-                        if (info.IsFolder == false)
-                        {
-                            TvFolder_BookmarkHandle(info, info.CurrentBookmark, BookmarkAction.OpenInNewTab);
-                        }
+                        OpenBookmark(BookmarkAction.OpenInNewTab, false);
                     }
                     break;
                 case Key.W:
-                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control) && LbChildren.SelectedItems.Count == 1)
+                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
                     {
-                        var info = (BookmarkTreeViewInfo)LbChildren.SelectedItem;
-                        if (info.IsFolder == false)
-                        {
-                            TvFolder_BookmarkHandle(info, info.CurrentBookmark, BookmarkAction.OpenInNewWindow);
-                        }
+                        OpenBookmark(BookmarkAction.OpenInNewWindow, false);
                     }
                     break;
             }
@@ -334,6 +351,10 @@ namespace ExplorerTabUtility.UI.Views
             var isFocusedTreeView = FocusManager.GetFocusedElement(this) is TreeViewItem;
             switch (action)
             {
+                case BookmarkAction.OpenInNewTab:
+                case BookmarkAction.OpenInNewWindow:
+                    OpenBookmark(action, isFocusedTreeView);
+                    break;
                 case BookmarkAction.Delete:
                     if (isFocusedTreeView)
                     {
@@ -377,10 +398,8 @@ namespace ExplorerTabUtility.UI.Views
                     await explorerWatcher.Open(bookmark.Location, true, windowHandle, inCurrentTab: true);
                     break;
                 case BookmarkAction.OpenInNewTab:
-                    await explorerWatcher.Open(bookmark.Location, true, windowHandle, inCurrentTab: false);
-                    break;
                 case BookmarkAction.OpenInNewWindow:
-                    await explorerWatcher.Open(bookmark.Location, false, windowHandle);
+                    OpenBookmark(action, false);
                     break;
                 case BookmarkAction.Delete:
                     DeleteSelectedItems();

@@ -155,6 +155,30 @@ namespace ExplorerTabUtility.UI.Views
             ExitDialog();
         }
 
+        private async void OpenFolderBookmark(BookmarkMenuInfo info, BookmarkAction action)
+        {
+            var infos = info.GetBookmarkInfos().ToList();
+            if (infos.Count == 0) return;
+
+            if (action == BookmarkAction.OpenInNewTab)
+            {
+                foreach (var item in infos)
+                {
+                    await explorerWatcher.Open(item.Location, true, windowHandle, inCurrentTab: false);
+                }
+                return;
+            }
+
+            var newWindowHandle = await explorerWatcher.Open(infos.First().Location, false, windowHandle);
+            if (newWindowHandle != 0 && infos.Count > 1)
+            {
+                foreach (var item in infos)
+                {
+                    await explorerWatcher.Open(item.Location, true, newWindowHandle, inCurrentTab: false);
+                }
+            }
+        }
+
         #region 事件注册
         private void SetupEventHandlers()
         {
@@ -177,6 +201,10 @@ namespace ExplorerTabUtility.UI.Views
                         BookmarkMenu.RenameFolder(info, folder.Name);
                     }
                     ExitDialog();
+                    break;
+                case BookmarkAction.OpenInNewTab:
+                case BookmarkAction.OpenInNewWindow:
+                    OpenFolderBookmark(info, action);
                     break;
                 case BookmarkAction.ManageBookmarks:
                     ShowBookmarkManager();

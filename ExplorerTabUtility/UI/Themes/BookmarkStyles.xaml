@@ -244,6 +244,15 @@
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.Delete}"/>
         <Separator/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+T"
+                  Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+W"
+                  Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
+        <Separator/>
         <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+X"
                   Header="{Binding LanguageFields.Cut,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -274,6 +283,15 @@
                   Header="{Binding LanguageFields.Delete,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.Delete}"/>
+        <Separator/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+T"
+                  Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+W"
+                  Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
         <Separator/>
         <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+X"
                   Header="{Binding LanguageFields.Cut,Source={x:Static language:LangeuageHelper.Instance}}"
@@ -339,6 +357,15 @@
     <!-- 特殊文件夹的右键菜单 -->
     <ContextMenu x:Key="SpecialFolderMenuItemContextMenu">
         <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+                  Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+                  Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
+        <Separator/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
                   Header="{Binding LanguageFields.NewFolder,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.NewFolder}"/>
@@ -356,6 +383,15 @@
 
     <!-- 文件夹的右键菜单 -->
     <ContextMenu x:Key="FolderMenuItemContextMenu">
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+                  Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+                  Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
+        <Separator/>
         <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
                   Header="{Binding LanguageFields.NewFolder,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -455,6 +491,15 @@
                   Header="{Binding LanguageFields.NewFolder,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.NewFolder}"/>
+        <Separator/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+T"
+                  Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+W"
+                  Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
+                  Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
         <Separator/>
         <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+X"
                   Header="{Binding LanguageFields.Cut,Source={x:Static language:LangeuageHelper.Instance}}"

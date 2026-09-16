@@ -51,35 +51,20 @@ namespace ExplorerTabUtility.UI.Views.Controls
                 case Key.Delete:
                     Delete();
                     break;
+                case Key.T:
+                    HandleCtrlEvent(BookmarkAction.OpenInNewTab);
+                    break;
+                case Key.W:
+                    HandleCtrlEvent(BookmarkAction.OpenInNewWindow);
+                    break;
                 case Key.X:
-                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
-                    {
-                        var info = (BookmarkTreeViewInfo)SelectedItem;
-                        if (info != null && info.FirstLevel == false)
-                        {
-                            FolderHandle?.Invoke(info, info.CurrentFolder, BookmarkAction.Cut);
-                        }
-                    }
+                    HandleCtrlEvent(BookmarkAction.Cut, t => t.FirstLevel == false);
                     break;
                 case Key.C:
-                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
-                    {
-                        var info = (BookmarkTreeViewInfo)SelectedItem;
-                        if (info != null)
-                        {
-                            FolderHandle?.Invoke(info, info.CurrentFolder, BookmarkAction.Copy);
-                        }
-                    }
+                    HandleCtrlEvent(BookmarkAction.Copy);
                     break;
                 case Key.V:
-                    if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
-                    {
-                        var info = (BookmarkTreeViewInfo)SelectedItem;
-                        if (info != null && BookmarkManager.ClipboardManager.TreeViewCanPaste)
-                        {
-                            FolderHandle?.Invoke(info, info.CurrentFolder, BookmarkAction.Paste);
-                        }
-                    }
+                    HandleCtrlEvent(BookmarkAction.Paste, t => BookmarkManager.ClipboardManager.TreeViewCanPaste);
                     break;
                 case Key.N:
                     if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
@@ -91,6 +76,20 @@ namespace ExplorerTabUtility.UI.Views.Controls
                         }
                     }
                     break;
+            }
+        }
+
+        private void HandleCtrlEvent(BookmarkAction action) => HandleCtrlEvent(action, t => true);
+
+        private void HandleCtrlEvent(BookmarkAction action, Func<BookmarkTreeViewInfo, bool> condition)
+        {
+            if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
+            {
+                var info = (BookmarkTreeViewInfo)SelectedItem;
+                if (info != null && condition(info))
+                {
+                    FolderHandle?.Invoke(info, info.CurrentFolder, action);
+                }
             }
         }
         #endregion
@@ -285,6 +284,8 @@ namespace ExplorerTabUtility.UI.Views.Controls
                     break;
                 case BookmarkAction.Delete:
                 case BookmarkAction.Rename:
+                case BookmarkAction.OpenInNewTab:
+                case BookmarkAction.OpenInNewWindow:
                 case BookmarkAction.Cut:
                 case BookmarkAction.Copy:
                 case BookmarkAction.Paste:

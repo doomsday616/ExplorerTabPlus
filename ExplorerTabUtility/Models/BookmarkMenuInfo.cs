@@ -403,6 +403,28 @@ namespace ExplorerTabUtility.Models
             return id;
         }
 
+        /// <summary>
+        /// 获取书签，文件夹的话只获取当前文件夹的，不会递归子文件夹
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BookmarkInfo> GetBookmarkInfos()
+        {
+            if (CurrentBookmark != BookmarkInfo.Empty)
+            {
+                yield return CurrentBookmark;
+            }
+            else
+            {
+                foreach (var item in children)
+                {
+                    if (item.CurrentBookmark != BookmarkInfo.Empty)
+                    {
+                        yield return item.CurrentBookmark;
+                    }
+                }
+            }
+        }
+
         private void Init(bool isFolder, int level)
         {
             Level = level;

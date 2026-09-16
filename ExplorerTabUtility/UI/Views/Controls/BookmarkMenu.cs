@@ -206,6 +206,8 @@ namespace ExplorerTabUtility.UI.Views.Controls
             switch (action)
             {
                 case BookmarkAction.ManageBookmarks:
+                case BookmarkAction.OpenInNewTab:
+                case BookmarkAction.OpenInNewWindow:
                 case BookmarkAction.NewBookmark:
                 case BookmarkAction.NewFolder:
                 case BookmarkAction.Rename:

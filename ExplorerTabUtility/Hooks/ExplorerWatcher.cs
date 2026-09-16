@@ -187,13 +187,13 @@ public class ExplorerWatcher : IHook
         if (bringToFront)
             WinApi.RestoreWindowToForeground(windowHandle);
     }
-    public async Task Open(string? location, bool asTab, nint windowHandle, int delay = 0, bool inCurrentTab = false)
+    public async Task<nint> Open(string? location, bool asTab, nint windowHandle, int delay = 0, bool inCurrentTab = false)
     {
         if (delay > 0)
             await Task.Delay(delay);
 
         var normalizedPath = Helper.NormalizeLocation(location ?? string.Empty);
-        
+
         if (normalizedPath.StartsWith("http", StringComparison.OrdinalIgnoreCase) ||
             normalizedPath.StartsWith("www.", StringComparison.OrdinalIgnoreCase) ||
             System.IO.File.Exists(normalizedPath))
@@ -202,33 +202,32 @@ public class ExplorerWatcher : IHook
             {
                 Helper.BypassWinForegroundRestrictions();
                 Process.Start(new ProcessStartInfo(normalizedPath) { UseShellExecute = true });
-                return;
+                return 0;
             }
             catch
             {
                 //
             }
         }
-        
+
         if (!asTab)
         {
-            await OpenNewWindowWithSelection(new WindowRecord(normalizedPath));
-            return;
+            return await OpenNewWindow(new WindowRecord(normalizedPath));
         }
 
         if (string.IsNullOrWhiteSpace(normalizedPath) && !_reuseTabs)
         {
             await RequestToOpenNewTab(windowHandle, bringToFront: true);
-            return;
+            return windowHandle;
         }
 
         if (_windowEntryDict.Count > 0)
         {
             OpenInTab(windowHandle, normalizedPath, inCurrentTab);
-            return;
+            return windowHandle;
         }
 
-        await OpenNewWindowWithSelection(new WindowRecord(normalizedPath));
+        return await OpenNewWindow(new WindowRecord(normalizedPath));
     }
     public void OpenInTab(nint windowHandle, string location, bool inCurrentTab)
     {
@@ -549,6 +548,45 @@ public class ExplorerWatcher : IHook
             if (result != MessageBoxResult.Yes) continue;
             
             _ = OpenTabNavigateWithSelection(record);
+        }
+    }
+    private async Task<nint> OpenNewWindow(WindowRecord windowToOpen, bool duplicate = true, bool lockToOpenWindows = true)
+    {
+        if (lockToOpenWindows)
+            await _toOpenWindowsLock.WaitAsync();
+
+        try
+        {
+            lock (_closedWindowsLock)
+                _closedWindows.Add(windowToOpen);
+
+            nint[]? currentWindows = Helper.GetAllExplorerWindows().ToArray();
+
+            Helper.BypassWinForegroundRestrictions();
+
+            var location = string.IsNullOrWhiteSpace(windowToOpen.Location) ? _defaultLocation : windowToOpen.Location;
+            await RunInStaThread(() =>
+            {
+                Shell? shell = null;
+                try
+                {
+                    shell = new Shell();
+                    shell.ShellExecute(location, "", "", duplicate ? "opennewwindow" : "open");
+                }
+                finally
+                {
+                    if (shell != null)
+                        Marshal.ReleaseComObject(shell);
+                }
+            });
+
+            var newWindowHandle = await Helper.ListenForNewExplorerWindowAsync(currentWindows ?? []);
+            return newWindowHandle;
+        }
+        finally
+        {
+            if (lockToOpenWindows)
+                _toOpenWindowsLock.Release();
         }
     }
     private async Task OpenNewWindowWithSelection(WindowRecord windowToOpen, bool duplicate = true, bool lockToOpenWindows = true)
