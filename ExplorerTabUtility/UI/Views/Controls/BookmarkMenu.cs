@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using ExplorerTabUtility.Helpers;
 using ExplorerTabUtility.Managers;
 using ExplorerTabUtility.Models;
@@ -29,6 +31,7 @@ namespace ExplorerTabUtility.UI.Views.Controls
 
         public BookmarkMenu()
         {
+            PreviewMouseLeftButtonDown += BookmarkMenu_PreviewMouseLeftButtonDown;
             allBookmark = new BookmarkMenuInfo(BookmarkManager.Folder, -1, null, BookmarkClickAction, BookmarkMenuClickAction, FolderMenuClickAction, true);
             mainBookmarks = new ObservableCollection<BookmarkMenuInfo>();
             overflowBookmark = new BookmarkMenuInfo(BookmarkManager.OverflowFolder, 0, null) { IsDockRight = true };
@@ -36,6 +39,29 @@ namespace ExplorerTabUtility.UI.Views.Controls
             separator = new BookmarkMenuSeparatorInfo { IsDockRight = true };
             bindBookmarks = new ObservableCollection<BaseBookmarkMenuInfo>();
             ItemsSource = bindBookmarks;
+        }
+
+        private void BookmarkMenu_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is not DependencyObject source) return;
+
+            var item = VisualTreeHelperEx.GetParent<MenuItem>(source);
+            if (item == null) return;
+            if (item.DataContext is not BookmarkMenuInfo info) return;
+
+            if (info.IsFolder)
+            {
+                if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Control))
+                {
+                    FolderHandle?.Invoke(info, info.CurrentFolder, BookmarkAction.OpenInNewTab);
+                    e.Handled = true;
+                }
+                else if (KeyboardSimulator.IsKeyPressed((int)VirtualKey.Shift))
+                {
+                    FolderHandle?.Invoke(info, info.CurrentFolder, BookmarkAction.OpenInNewWindow);
+                    e.Handled = true;
+                }
+            }
         }
 
         /// <summary>

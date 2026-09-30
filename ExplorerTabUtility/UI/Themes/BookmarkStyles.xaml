@@ -356,11 +356,11 @@
     <!--#region MenuItem右键菜单 -->
     <!-- 特殊文件夹的右键菜单 -->
     <ContextMenu x:Key="SpecialFolderMenuItemContextMenu">
-        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+LMB"
                   Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
-        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Shift+LMB"
                   Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
@@ -383,11 +383,11 @@
 
     <!-- 文件夹的右键菜单 -->
     <ContextMenu x:Key="FolderMenuItemContextMenu">
-        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Ctrl+LMB"
                   Header="{Binding LanguageFields.OpenInNewTab,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.OpenInNewTab}"/>
-        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}"
+        <MenuItem Style="{StaticResource TextBoxContextMenuItemStyle}" InputGestureText="Shift+LMB"
                   Header="{Binding LanguageFields.OpenInNewWindow,Source={x:Static language:LangeuageHelper.Instance}}"
                   Command="{Binding PlacementTarget.DataContext.MenuClickCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                   CommandParameter="{x:Static models:BookmarkAction.OpenInNewWindow}"/>
