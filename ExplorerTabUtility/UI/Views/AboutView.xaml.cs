@@ -59,8 +59,10 @@ public partial class AboutView : UserControl
     private void BtnPatreon_Click(object _, RoutedEventArgs __) => OpenUrl("https://www.patreon.com/w4po");
     private void BtnBuyMeACoffee_Click(object _, RoutedEventArgs __) => OpenUrl("https://www.buymeacoffee.com/w4po");
     private void BtnPayPal_Click(object _, RoutedEventArgs __) => OpenUrl("https://paypal.me/w4po77");
+    // Developer and sponsor links intentionally credit the original author (w4po);
+    // the project page points at the maintained ExplorerTabPlus fork (issues, releases).
     private void OpenDeveloperPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/w4po");
-    private void OpenProjectPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/w4po/ExplorerTabUtility");
+    private void OpenProjectPage(object _, RoutedEventArgs __) => OpenUrl("https://github.com/doomsday616/ExplorerTabPlus");
 
     private void OpenSupportPage(object sender, RoutedEventArgs _)
     {
