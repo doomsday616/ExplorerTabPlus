@@ -114,13 +114,11 @@ public partial class HotKeyProfileControl : UserControl, IDisposable
         }
 
         //重新设置选中项，没有的话选中项的不会更新
-        var selectedItem = CbScope.SelectedItem;
-        CbScope.SelectedItem = null;
-        CbScope.SelectedItem = selectedItem;
-
-        selectedItem = CbAction.SelectedItem;
-        CbAction.SelectedItem = null;
-        CbAction.SelectedItem = selectedItem;
+        var scopeSelectedIndex = CbScope.SelectedIndex;
+        var actionSelectedIndex = CbAction.SelectedIndex;
+        CbScope.SelectedIndex = -1;
+        CbScope.SelectedIndex = scopeSelectedIndex;
+        CbAction.SelectedIndex = actionSelectedIndex;
     }
 
     // Event handlers
@@ -322,11 +320,11 @@ public partial class HotKeyProfileControl : UserControl, IDisposable
                 CbOpenAsTab.IsEnabled = false;
                 break;
         }
-        
+
         // If the name is empty or is an exact match of an action, set it to the hotkey.
-        var isExactMatch = Enum.GetNames(typeof(HotKeyAction)).Any(a => a == TxtName.Text);
-        if (string.IsNullOrWhiteSpace(TxtName.Text) || isExactMatch)
-            TxtName.Text = selectedAction.ToString();
+        var isExactMatch = Enum.GetNames(typeof(HotKeyAction)).Any(a => LangeuageHelper.Instance.LanguageFields.ContainsValue(a, TxtName.Text));
+        if (string.IsNullOrWhiteSpace(TxtName.Text) || TxtName.Text == TxtHotKeys.Text || isExactMatch)
+            TxtName.Text = LangeuageHelper.Instance.LanguageFields.GetValue(selectedAction.ToString());
     }
 
     private static List<ActionItem> GetAllowedActions(HotkeyScope scope)
